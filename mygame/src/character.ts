@@ -1,8 +1,7 @@
 import { Tile } from "./tile";
 
 const CHARACTER_STRING = `
-  <div id="character">
-  </div>
+  <img id="character" src="src/character.png"/>
   `
 
 export class Character {
