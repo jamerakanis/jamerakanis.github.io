@@ -8,16 +8,43 @@ const CHARACTER_START_X = 4
 const CHARACTER_START_Y = 6
 
 export class Logic extends Subject {
-  public mode : "MOVE" | "TARGET";
-  public turn : number;
-  public map : Map;
+  private mode : "MOVE" | "TARGET";
+  private turn : number;
+  private map : Map;
+  private character : Character
 
-  move(e : MouseEvent) {
-    // need coordinates of character rn
+  get _mode() {
+    return this.mode;
+  }
+  get _turn() : number {
+    return this.turn;
+  }
+  get _map() : Map {
+    return this.map
+  }
+  get _character() : Character {
+    return this.character
+  }
+  
+
+  handleMove(direction : "UP" | "DOWN" | "LEFT" | "RIGHT") {
+    let deltax = 0;
+    let deltay = 0;
+    if (direction == "UP") deltay = -1;
+    if (direction == "DOWN") deltay = 1;
+    if (direction == "LEFT") deltax = -1;
+    if (direction == "RIGHT") deltax = 1;
+    const destination = this.map.getTile(
+      this.character._tile._x + deltax,
+      this.character._tile._y + deltay
+    )
+    this._character.transport(destination)
+
+    // set facing
+    this.character.face(direction)
   }
 
   teleport(tile : Tile) {
-
   }
 
   constructor() {
@@ -30,7 +57,7 @@ export class Logic extends Subject {
     if (!app) throw new Error("app div not found");
     
     // making map
-    this.map = new Map(app, this)
+    this.map = new Map(app, ARENA_WIDTH, this)
     const sampleTile = document.getElementById("(0,0)") as HTMLElement;
     if (!sampleTile) throw new Error("sampleTile not found");
 
@@ -40,6 +67,6 @@ export class Logic extends Subject {
     this.map._element.style.height = `${ARENA_WIDTH * sampleTile.offsetHeight}px`;
 
     // making character
-    const character = new Character(this.map.getTile(CHARACTER_START_X, CHARACTER_START_Y))
+    this.character = new Character(this.map.getTile(CHARACTER_START_X, CHARACTER_START_Y))
   }
 }

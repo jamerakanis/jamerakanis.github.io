@@ -1,6 +1,5 @@
 import { Logic } from "./logic";
 import { Tile } from "./tile";
-import { ARENA_WIDTH } from "./logic";
 
 export class Map {
   private tile : Tile[]
@@ -12,18 +11,39 @@ export class Map {
   }
   
   getTile(x : number, y : number) {
-    if (x >= ARENA_WIDTH ||
-      y >= ARENA_WIDTH ||
+    if (x >= this.width ||
+      y >= this.width ||
       x < 0 ||
       y < 0) throw new Error("tried to get out of bounds tile")
-    return this.tile[ARENA_WIDTH * (y) + (x)];
+    return this.tile[this.width * (y) + (x)];
+  }
+
+  getDirection(src : Tile, des : Tile) : "UP" | "DOWN" | "LEFT" | "RIGHT" | "NONE" {
+    const deltax = des._x - src._x;
+    const deltay = des._y - src._y;
+    if (deltax == 0 && deltay == 0) return "NONE"
+    if (Math.abs(deltax) >= Math.abs(deltay)) { // horizontal
+      if (deltax > 0) return "RIGHT"
+      if (deltax < 0) return "LEFT"
+    } else if (Math.abs(deltax) < Math.abs(deltay)){ // vertical
+      if (deltay > 0) return "DOWN"
+      if (deltay < 0) return "UP"
+    }
+    return "NONE"
   }
 
   handleTileClick(tile : Tile) {
-    console.log(tile._id)
+    switch(this.logic._mode) {
+      case "MOVE":
+        const direction = this.getDirection(this.logic._character._tile, tile)
+        if (direction == "NONE") return;
+        console.log(direction)
+        this.logic.handleMove(direction)
+        break;
+    }
   }
   
-  constructor(parent : HTMLElement, private logic : Logic) {
+  constructor(parent : HTMLElement, private width : number, private logic : Logic) {
     // Adding element to HTML
     parent.insertAdjacentHTML(
       `beforeend`,
@@ -35,8 +55,8 @@ export class Map {
 
     // making tiles
     this.tile = new Array()
-    for (let i = 0; i < ARENA_WIDTH; i++) {
-      for (let j = 0; j < ARENA_WIDTH; j++) {
+    for (let i = 0; i < width; i++) {
+      for (let j = 0; j < width; j++) {
         this.tile.push(new Tile(this, j, i))
       }
     }
