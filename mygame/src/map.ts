@@ -37,7 +37,6 @@ export class Map {
       case "MOVE":
         const direction = this.getDirection(this.logic._character._tile, tile)
         if (direction == "NONE") return;
-        console.log(direction)
         this.logic.handleMove(direction)
         break;
     }

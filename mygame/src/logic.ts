@@ -61,8 +61,6 @@ export class Logic extends Subject {
     const sampleTile = document.getElementById("(0,0)") as HTMLElement;
     if (!sampleTile) throw new Error("sampleTile not found");
 
-    console.log(sampleTile.offsetWidth)
-
     this.map._element.style.width = `${ARENA_WIDTH * sampleTile.offsetWidth}px`;
     this.map._element.style.height = `${ARENA_WIDTH * sampleTile.offsetHeight}px`;
 
