@@ -52,4 +52,5 @@ div.tile {
 img#character {
   height: min-content;
   filter: drop-shadow(0px 0px 10px orange) brightness(70%);
+  user-select: none;
 }
