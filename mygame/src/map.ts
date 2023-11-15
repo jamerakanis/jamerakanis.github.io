@@ -9,6 +9,10 @@ export class Map {
     if (!map) throw new Error("map div not found");
     return map;
   }
+
+  get _logic() {
+    return this.logic;
+  }
   
   getTile(x : number, y : number) {
     if (x >= this.width ||

@@ -3,6 +3,14 @@
 import { Map } from "./map";
 
 export class Tile {
+  private fogged = true;
+  fog() {
+    this.fogged = true;
+  }
+  unfog() {
+    this.fogged = false;
+  }
+
   get _element() : HTMLElement{
     const tile = document.getElementById(this._id) as HTMLElement;
     if (!tile) throw new Error("map div not found");
